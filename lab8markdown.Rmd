@@ -4,3 +4,86 @@ author: "Rachel Behm"
 date: "November 19, 2018"
 output: html_document
 ---
+```{r, include=FALSE}
+#load in packages and csv file
+library(tidyverse)
+
+salmon <- read_csv("salmon_imports_simplified.csv")
+```
+
+##Exploratory scatterplot
+
+If we’re going to use linear regression, we should have reason to think that a linear relationship exists between
+variables. 
+
+So go ahead and look at the data (year on x-axis, imports on y-axis).
+
+__a.__ Make an exploratory scatterplot in ggplot (recall: geom_point). Do not finalize.
+
+__b.__ As a comment in the code chunk, answer: Overall, does it look like describing the relationship between
+year and fresh salmon imports using linear regression makes sense? Do you have any concerns about
+using linear regression to describe the relationship?
+
+```{r}
+salmon_scatter<- ggplot(salmon, aes(x=year, y=salmon_fresh)) +
+  geom_point()
+salmon_scatter
+```
+
+##Linear regression in R
+
+**The general syntax for linear regression in R is:**
+
+model_name <- lm(y_variable ~ x_variable, data = df_name)
+
+So, if I have a data frame called ‘salmon’ containing variables ‘year’ and ‘salmon_fresh,’ __I would use__:
+
+salmon_model <- lm(salmon_fresh ~ year, data = salmon)
+
+_________________________________________________________________________________________________________________
+__a.__ Perform linear regression to describe the trend in total volume of fresh salmon imported to the U.S.
+from 1990 - 2017.
+
+__b.__ Call the model name to see the intercept and slope for the model. Recall:
+y = 0 + 1x + 
+
+__c.__ Write out the model equation, including the actual variables and coefficients instead of  and x/y. For
+example (these are not the actual model coefficients you’ll find):
+Imports(tons) = −400 + 25(Y ear)
+
+__d.__ Think about the model equation that you found to describe trends in salmon imports. In your markdown
+document, answer the following in 1-sentence each:
+• What does the slope mean in the context of this model?
+• What does the y-intercept mean in the context of this model? Why is that concerning? What does this
+mean about extrapolating this model for past values?
+
+```{r}
+#syntax for making a linear regression with this data
+salmon_model <- lm(salmon_fresh ~ year, data = salmon)
+salmon_model
+```
+
+##Model diagnostics
+Use plot(model_name) to view model diagnostics in the ‘Plots’ tab 
+
+(press Enter in the Console to contine to subsequent diagnostic plots). 
+
+__Explore the diagnostic plots to answer the following:__
+• Do residuals appear normally distributed?
+• Any concerns about heteroscedasticity or outliers?
+
+To view all four diagnostic plots at once (and have them appear in your knitted document), you can use the
+following:
+
+par(mfrow = c(2,2))
+plot(model_name)
+
+```{r}
+#view model diagnostics in plots tab
+#plot(salmon_model)
+
+#to make all appear together and save space
+par(mfrow= c(2,2))
+plot(salmon_model)
+```
+
