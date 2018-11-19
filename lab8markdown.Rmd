@@ -87,3 +87,97 @@ par(mfrow= c(2,2))
 plot(salmon_model)
 ```
 
+##Explore model fit and significance
+
+Use summary(model_name) to see the detailed model information, including model fit information (e.g. R2
+and coefficient standard errors) and statistics.
+
+See the lecture materials to interpret each component. 
+
+**Answer the following:**
+• Does year significantly predict salmon imports?
+• What does the R2 value actually mean in words?
+• What proportion of the variance in salmon imports is NOT explained by year?
+```{r}
+#get model information
+summary(salmon_model)
+```
+
+##Prepare a final graph
+
+See the example code below to create a final graph of the linear regression model with the original data,
+model and 95% confidence interval for predictions.
+
+**The code and graph shown below are created with:**
+• An original data frame called ‘salmon’
+• . . . which contains x and y variables ‘year’ and ‘salmon_fresh’
+• . . . for which a linear model was found, called ‘salmon_model’
+
+If your data frame, columns, or model name differ, you’ll need to update accordingly.
+
+You should know what each component and argument of this graphics code actually does. 
+
+Explore (i.e. Google) geom_smooth() to better understand what the plotted CI ribbon actually means, and to see other alternatives within the geom.
+```{r}
+#make a graph of year and imports 
+salmon_final_graph <- ggplot(salmon, aes(x = year, y = salmon_fresh)) +
+geom_point() +
+geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
+theme_bw() +
+scale_x_continuous(expand = c(0,0), limits = c(1990, 2017)) +
+labs(x = "Year", y = "U.S. Annual Fresh Salmon Imports\n(1,000 pounds)")
+
+salmon_final_graph
+```
+
+##Make predictions using the model
+Let’s say we want to use our model to make predictions for U.S. fresh salmon imports in years 2022, 2024,
+2026 and 2028.
+
+__• Option 1 (not recommended):__ Plug each of those years into the model equation separately to calculate
+the expected U.S. imports.
+
+__• Option 2 (recommended):__ Create a data frame containing the ‘new values’ that you want to make
+predictions for, feed that into the predict() function
+
+Let’s use Option 2. 
+First, we’ll make a data frame called ‘new_years’ containing the sequence of years that we want to make predictions for. 
+Notice that the column name we create is the SAME as the variable name ‘year’ that the model uses.
+
+new_years <- data.frame(year = c(2022, 2024, 2026, 2028))
+
+View the new data frame you just created (it’s a single column, with heading ‘year’, containing those 4
+values).
+
+new_years
+
+## year
+## 1 2022
+## 2 2024
+## 3 2026
+## 4 2028
+
+Then feed that data frame into the predict() function, letting it know which model to use to make predictions
+for the new values.
+Include interval = “confidence” to also report the lower and upper bounds of the 95% CI for model fit at
+each year.
+
+future_predict <- predict(salmon_model, newdata = new_years, interval = "confidence")
+future_predict
+
+## fit lwr upr
+## 1 282298.5 267877.4 296719.6
+## 2 297397.6 281656.7 313138.5
+## 3 312496.8 295418.5 329575.0
+## 4 327595.9 309166.6 346025.2
+
+Bind the prediction outcomes (those are the values in column ‘fit’) with the ‘new_years’ data to actually
+create a useful table of predicted imports and upper and lower CI:
+predictions <- data.frame(new_years, future_predict)
+predictions
+
+## year fit lwr upr
+## 1 2022 282298.5 267877.4 296719.6
+## 2 2024 297397.6 281656.7 313138.5
+## 3 2026 312496.8 295418.5 329575.0
+## 4 2028 327595.9 309166.6 346025.2
