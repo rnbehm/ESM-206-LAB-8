@@ -1,0 +1,6 @@
+---
+title: "Lab 8 - Linear Regression in R"
+author: "Rachel Behm"
+date: "November 19, 2018"
+output: html_document
+---
