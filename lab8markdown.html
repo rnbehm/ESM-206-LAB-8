@@ -227,57 +227,48 @@ salmon_final_graph</code></pre>
 <p><strong>• Option 1 (not recommended):</strong> Plug each of those years into the model equation separately to calculate the expected U.S. imports.</p>
 <p><strong>• Option 2 (recommended):</strong> Create a data frame containing the ‘new values’ that you want to make predictions for, feed that into the predict() function</p>
 <p>Let’s use Option 2. First, we’ll make a data frame called ‘new_years’ containing the sequence of years that we want to make predictions for. Notice that the column name we create is the SAME as the variable name ‘year’ that the model uses.</p>
-<p>new_years &lt;- data.frame(year = c(2022, 2024, 2026, 2028))</p>
 <p>View the new data frame you just created (it’s a single column, with heading ‘year’, containing those 4 values).</p>
-<p>new_years</p>
-</div>
-<div id="year" class="section level2">
-<h2>year</h2>
-</div>
-<div id="section" class="section level2">
-<h2>1 2022</h2>
-</div>
-<div id="section-1" class="section level2">
-<h2>2 2024</h2>
-</div>
-<div id="section-2" class="section level2">
-<h2>3 2026</h2>
-</div>
-<div id="section-3" class="section level2">
-<h2>4 2028</h2>
+<pre class="r"><code>new_years &lt;- data.frame(year = c(2022, 2024, 2026, 2028))
+new_years</code></pre>
+<pre><code>##   year
+## 1 2022
+## 2 2024
+## 3 2026
+## 4 2028</code></pre>
 <p>Then feed that data frame into the predict() function, letting it know which model to use to make predictions for the new values. Include interval = “confidence” to also report the lower and upper bounds of the 95% CI for model fit at each year.</p>
-<p>future_predict &lt;- predict(salmon_model, newdata = new_years, interval = “confidence”) future_predict</p>
+<pre class="r"><code>future_predict &lt;- predict(salmon_model, newdata = new_years, interval = &quot;confidence&quot;)
+future_predict</code></pre>
+<pre><code>##        fit      lwr      upr
+## 1 282298.5 267877.4 296719.6
+## 2 297397.6 281656.7 313138.5
+## 3 312496.8 295418.5 329575.0
+## 4 327595.9 309166.6 346025.2</code></pre>
+<p>Bind the prediction outcomes (those are the values in column ‘fit’) with the ‘new_years’ data to actually create a useful table of predicted imports and upper and lower CI:</p>
+<pre class="r"><code>predictions &lt;- data.frame(new_years, future_predict)
+predictions</code></pre>
+<pre><code>##   year      fit      lwr      upr
+## 1 2022 282298.5 267877.4 296719.6
+## 2 2024 297397.6 281656.7 313138.5
+## 3 2026 312496.8 295418.5 329575.0
+## 4 2028 327595.9 309166.6 346025.2</code></pre>
 </div>
-<div id="fit-lwr-upr" class="section level2">
-<h2>fit lwr upr</h2>
+<div id="find-pearsons-r-correlation" class="section level2">
+<h2>Find Pearson’s r (correlation)</h2>
+<p>Use the cor() function to find Pearson’s r for the linear relationship described between year and salmon imports.</p>
+<p>See ?cor to view R documentation in the ‘Help’ window.</p>
+<p>Notice that the default correlation is Pearson’s r.</p>
+<p>Generally, if you’re trying to explore the correlation between variable_1 and variable_2 in data frame ‘df’, the function syntax is as follows:</p>
+<p>test_name &lt;- cor(df<span class="math inline">\(variable_1, df\)</span>variable_2)</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Calculate Pearson’s r for the year vs. salmon imports linear trend.</p></li>
+<li><p>In words: Would you describe this as a weak/strong negative/positive correlation?</p></li>
+</ol>
+<pre class="r"><code>#?cor
+#pearson &lt;- cor(df$salmon_fresh, df$year)</code></pre>
 </div>
-<div id="section-4" class="section level2">
-<h2>1 282298.5 267877.4 296719.6</h2>
-</div>
-<div id="section-5" class="section level2">
-<h2>2 297397.6 281656.7 313138.5</h2>
-</div>
-<div id="section-6" class="section level2">
-<h2>3 312496.8 295418.5 329575.0</h2>
-</div>
-<div id="section-7" class="section level2">
-<h2>4 327595.9 309166.6 346025.2</h2>
-<p>Bind the prediction outcomes (those are the values in column ‘fit’) with the ‘new_years’ data to actually create a useful table of predicted imports and upper and lower CI: predictions &lt;- data.frame(new_years, future_predict) predictions</p>
-</div>
-<div id="year-fit-lwr-upr" class="section level2">
-<h2>year fit lwr upr</h2>
-</div>
-<div id="section-8" class="section level2">
-<h2>1 2022 282298.5 267877.4 296719.6</h2>
-</div>
-<div id="section-9" class="section level2">
-<h2>2 2024 297397.6 281656.7 313138.5</h2>
-</div>
-<div id="section-10" class="section level2">
-<h2>3 2026 312496.8 295418.5 329575.0</h2>
-</div>
-<div id="section-11" class="section level2">
-<h2>4 2028 327595.9 309166.6 346025.2</h2>
+<div id="write-a-concluding-statement-about-the-relationship" class="section level2">
+<h2>Write a concluding statement about the relationship</h2>
+<p>Using the document Communicating Results of Basic Linear Regression (posted on GauchoSpace) as a guide, write a final 1 - 2 sentence statement describing the results of your linear regression and Pearson’s r findings.</p>
 </div>
 
 

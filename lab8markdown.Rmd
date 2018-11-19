@@ -144,40 +144,58 @@ Let’s use Option 2.
 First, we’ll make a data frame called ‘new_years’ containing the sequence of years that we want to make predictions for. 
 Notice that the column name we create is the SAME as the variable name ‘year’ that the model uses.
 
-new_years <- data.frame(year = c(2022, 2024, 2026, 2028))
-
 View the new data frame you just created (it’s a single column, with heading ‘year’, containing those 4
 values).
 
+```{r}
+new_years <- data.frame(year = c(2022, 2024, 2026, 2028))
 new_years
-
-## year
-## 1 2022
-## 2 2024
-## 3 2026
-## 4 2028
+```
 
 Then feed that data frame into the predict() function, letting it know which model to use to make predictions
 for the new values.
 Include interval = “confidence” to also report the lower and upper bounds of the 95% CI for model fit at
 each year.
 
+
+```{r}
 future_predict <- predict(salmon_model, newdata = new_years, interval = "confidence")
 future_predict
+```
 
-## fit lwr upr
-## 1 282298.5 267877.4 296719.6
-## 2 297397.6 281656.7 313138.5
-## 3 312496.8 295418.5 329575.0
-## 4 327595.9 309166.6 346025.2
 
 Bind the prediction outcomes (those are the values in column ‘fit’) with the ‘new_years’ data to actually
 create a useful table of predicted imports and upper and lower CI:
+
+
+```{r}
 predictions <- data.frame(new_years, future_predict)
 predictions
+```
 
-## year fit lwr upr
-## 1 2022 282298.5 267877.4 296719.6
-## 2 2024 297397.6 281656.7 313138.5
-## 3 2026 312496.8 295418.5 329575.0
-## 4 2028 327595.9 309166.6 346025.2
+##Find Pearson’s r (correlation)
+
+Use the cor() function to find Pearson’s r for the linear relationship described between year and salmon
+imports.
+
+See ?cor to view R documentation in the ‘Help’ window. 
+
+Notice that the default correlation is Pearson’s r.
+
+Generally, if you’re trying to explore the correlation between variable_1 and variable_2 in data frame ‘df’,
+the function syntax is as follows:
+
+test_name <- cor(df$variable_1, df$variable_2)
+
+a. Calculate Pearson’s r for the year vs. salmon imports linear trend.
+
+b. In words: Would you describe this as a weak/strong negative/positive correlation?
+```{r}
+#?cor
+#pearson <- cor(df$salmon_fresh, df$year)
+```
+
+##Write a concluding statement about the relationship
+Using the document Communicating Results of Basic Linear Regression (posted on GauchoSpace) as a guide,
+write a final 1 - 2 sentence statement describing the results of your linear regression and Pearson’s r findings.
+
